@@ -1,0 +1,77 @@
+//WRITER 
+
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdio.h>
+int factorial(int a);
+int main()
+{
+int *a,*b,*c;
+printf("Mahima ann Abraham\nRoll no: 63\n");
+// ftok to generate unique key
+key_t key=ftok("shmfile",65);
+// shmget returns an identifier in shmid
+int shmid1 = shmget(key,sizeof(int),0666|IPC_CREAT);
+int shmid2 = shmget(key,sizeof(int),0666|IPC_CREAT);
+int shmid3 = shmget(key,sizeof(int),0666|IPC_CREAT);
+// shmat to attach to shared memory
+a = (int*) shmat(shmid1,(void*)0,0);
+b=a+1;
+c=b+1;
+int n,r;
+printf("Enter n:\t");
+scanf("%d",&n);
+printf("Enter r:\t");
+scanf("%d",&r);
+*a=factorial(n);
+*b=factorial(r);
+*c=factorial(n-r);
+printf("Data written in shared memory \nn= %d \nr= %d \nn-r= %d\n",*a,*b,*c);
+//detach from shared memory
+shmdt(a);
+shmdt(b);
+shmdt(c);
+return 0;
+}
+int factorial(int u)
+{
+int f=1,i;
+for(i=1;i<=u;i++)
+{
+  f=f*i;
+}
+return f;
+}
+
+//READER
+
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdio.h>
+int main()
+{
+int *a,*b,*c;
+// ftok to generate unique key
+key_t key=ftok("shmfile",65);
+// shmget returns an identifier in shmid
+int shmid1=shmget(key,sizeof(int),0666|IPC_CREAT);
+int shmid2=shmget(key,sizeof(int),0666|IPC_CREAT);
+int shmid3=shmget(key,sizeof(int),0666|IPC_CREAT);
+a=(int*)shmat(shmid1,(void*)0,0);
+b=a+1;
+c=b+1;
+float fact;
+fact=(float)(*a/((*b)*(*c)));
+printf("nCr = %dC%d = %f\n",*a,*b,fact);
+//detach from shared memory
+shmdt(a);
+shmdt(b);
+shmdt(c);
+shmctl(shmid1, IPC_RMID, NULL);
+shmctl(shmid2, IPC_RMID, NULL);
+shmctl(shmid3, IPC_RMID, NULL);
+return 0;
+}
+
+
+
