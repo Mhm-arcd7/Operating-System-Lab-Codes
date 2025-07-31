@@ -1,0 +1,42 @@
+//WRITER
+
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdio.h>
+int main() {
+key_t key = ftok("shmfile", 65);
+int shmid = shmget(key, sizeof(int), 0666|IPC_CREAT);
+int *num = (int*) shmat(shmid, (void*)0, 0);
+printf("Enter a number: ");
+scanf("%d", num);
+shmdt(num);
+return 0;
+}
+
+//READER
+
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdio.h>
+int main() {
+key_t key = ftok("shmfile", 65);
+int shmid = shmget(key, sizeof(int), 0666|IPC_CREAT);
+int *num = (int*) shmat(shmid, (void*)0, 0);
+int originalNum = *num;
+int reverseNum = 0, remainder;
+while (originalNum != 0) {
+ remainder = originalNum % 10;
+ reverseNum = reverseNum * 10 + remainder;
+ originalNum /= 10;
+	}
+printf("Reversed number is: %d\n", reverseNum);
+if (*num == reverseNum) {
+ printf("%d is a palindrome.\n", *num);
+	}
+else {
+    printf("%d is not a palindrome.\n", *num);
+	}
+shmdt(num);    
+shmctl(shmid, IPC_RMID, NULL);	
+return 0;
+}
