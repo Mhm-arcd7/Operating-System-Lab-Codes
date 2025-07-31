@@ -1,0 +1,56 @@
+#include<stdio.h> 
+#define max 20 
+void main() { 
+int 
+n,hp,p[max],distance=0,i,j,t=0,temp,d,a,direction ;  
+printf("Enter the number of disk queues: 
+"); 
+scanf("%d",&n); 
+printf("Enter the disk queue: "); 
+for (i=0;i<n;i++){ 
+scanf("%d",&p[i]); 
+} 
+printf("Enter the current head position: 
+"); 
+scanf("%d",&hp); 
+printf("Enter the number of disks: "); 
+scanf("%d",&d); 
+p[n] = hp; 
+p[n + 1] = d - 1; 
+p[n+3]=0; 
+n += 3; 
+for (i=0;i<=n+1;i++) { 
+for (j=i+1;j<=n+1;j++) { 
+if (p[i] > p[j]) { 
+temp = p[i]; 
+p[i] = p[j]; 
+p[j] = temp; 
+} 
+} 
+} 
+for (i=0;i<=n;i++) { 
+if (p[i] == hp) { 
+t = i; 
+break; 
+} 
+} 
+printf("The C-SCAN Disk Scheduling 
+
+printf("Enter the direction (0 for forward, 1 for backward): "); 
+scanf("%d",&direction); 
+is: "); 
+if (direction == 0) { 
+for (i = t; i<=n; i++)
+
+printf("%d->",p[i]); for(i=1;i<t-1;i++){ printf("%d->",p[i]); a=i; 
+}
+printf("%d",p[i]); 
+}elseif(direction==1){ for(i=t;i>1;i--) 
+printf("%d->",p[i]); printf("%d",p[i]); 
+for(i=n+1;i>t;i--) 
+printf("->%d",p[i]); 
+}
+distance=(p[n]-p[t])+(p[n]-0)+ (p[t-1]-0); 
+printf("\nThedistanceis: "); 
+printf("%d\n",distance); 
+}
