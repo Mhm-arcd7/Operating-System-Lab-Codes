@@ -1,0 +1,148 @@
+//USING FORK()
+
+#include <stdio.h>
+#include <sys/types.h>
+#include <unistd.h>
+void main()
+{
+fork();
+fork();
+printf("Lamborghini Huracan\n");
+}
+
+//USING EXEC()
+
+#include<stdio.h>
+#include<unistd.h>
+int main()
+{
+int i;
+printf("exec is executed");
+printf("\n");
+return 0;
+}
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+int main()
+{
+char *args[]={"./exec",NULL};
+printf("This is Exec1\n");
+execvp(args[0],args);
+printf("Ends");
+return 0;
+}
+
+//USING EXIT()
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+#include<sys/types.h>
+int main(int argc, char **argv)
+{ pid_t pid;
+pid = fork();
+if(pid==0)
+{ printf("Child process & pid: %d\n",getpid());
+exit(0); }
+else if(pid > 0)
+{ printf("Parent process & pid: %d\n",getpid()); }
+else
+{ printf("Forking Error\n");
+exit(EXIT_FAILURE); }
+return 0; }
+
+//USING GETPID()
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<sys/wait.h>
+#include<unistd.h>
+int main()
+{
+pid_t cpid;
+if (fork()== 0)
+exit(0);
+else
+cpid = wait(NULL);
+printf("Parent pid: %d\n", getpid());
+printf("Child pid: %d\n", cpid);
+return 0;
+}
+
+//USING STAT()
+
+#include<sys/stat.h>
+#include<stdio.h>
+#include<time.h>
+#include<stdint.h>
+int main()
+{
+struct stat sfile;
+stat("test.txt", &sfile);
+printf("Inode Number = %ld\n", sfile.st_ino);
+printf("Size = %ld\n",sfile.st_size);
+printf("Device ID=%ld\n",sfile.st_dev);
+}
+
+//USING OPENDIR() and READDIR()
+
+#include<stdio.h>
+#include<dirent.h>
+#include<stdlib.h>
+struct dirent *dptr;
+int main(int argc, char *argv[])
+{
+char buff[100];
+DIR*dirp;
+printf("Enter Directory name:\n");
+scanf("%s",buff);
+if((dirp=opendir(buff))==NULL)
+{
+printf("Given directory doesnt exist");
+exit(1);
+}
+while(dptr=readdir(dirp)){
+printf("%s\n",dptr->d_name);
+}
+close(dirp);
+}
+
+//USIING WAIT()
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<sys/wait.h>
+#include<unistd.h>
+int main()
+{
+pid_t cpid;
+if (fork()== 0)
+exit(0);
+else
+cpid = wait(NULL);
+printf("Parent pid: %d\n", getpid());
+printf("Child pid: %d\n", cpid);
+return 0;
+}
+
+//USING CLOSE()
+
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+int main()
+{
+int fd1 = open("test.txt", O_RDONLY);
+if (fd1 < 0) {
+printf("Error\n");
+exit(1);
+}
+printf("opened the fd = % d\n", fd1);
+if (close(fd1) < 0) {
+printf("Error\n");
+exit(1);
+}
+printf("closed the fd \n");}
