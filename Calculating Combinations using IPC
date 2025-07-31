@@ -7,7 +7,6 @@ int factorial(int a);
 int main()
 {
 int *a,*b,*c;
-printf("Mahima ann Abraham\nRoll no: 63\n");
 // ftok to generate unique key
 key_t key=ftok("shmfile",65);
 // shmget returns an identifier in shmid
