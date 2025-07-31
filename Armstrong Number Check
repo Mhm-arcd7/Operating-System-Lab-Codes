@@ -1,0 +1,15 @@
+#!/bin/bash
+echo "Enter Number:"
+read n
+s=0
+for((i=n;i>0;i=$((i/10))))
+do
+dig=$((i%10))
+s=$((s+dig*dig*dig))
+done
+if [ $s -eq $n ]
+then
+echo "Its Armstrong Number!"
+else
+echo "Not Armstrong Number!"
+fi
