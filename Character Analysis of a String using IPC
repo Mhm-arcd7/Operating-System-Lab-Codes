@@ -1,0 +1,53 @@
+//WRITER
+
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdio.h>
+#include <string.h>
+int main() {
+	printf("Mahima Ann Abraham\nRoll no:63\n");
+	key_t key = ftok("shmfile", 65);  //uniquekey
+	int shmid = shmget(key, 1024, 0666|IPC_CREAT);  //sharedmemorysegment
+	char *str = (char*) shmat(shmid, (void*)0, 0);
+	printf("Enter data: ");
+	fgets(str, 1024, stdin);
+	shmdt(str);
+	return 0;
+}
+
+//READER
+
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main() {    
+key_t key = ftok("shmfile", 65);	//unique key
+int shmid = shmget(key, 1024, 0666|IPC_CREAT);	//shared memory segment
+char *str = (char*) shmat(shmid, (void*)0, 0);
+int vowels = 0, symbols = 0, numbers = 0;
+for (int i = 0; i < strlen(str); ++i) {
+if (isalpha(str[i])) {
+   char c = tolower(str[i]);
+if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u')
+   ++vowels;
+    	}
+else if (isdigit(str[i])) {
+   ++numbers;
+    	}
+else if (isspace(str[i])) {
+   //leave it blank for whitespace
+    	}
+else {
+   ++symbols;
+ 	}
+  }
+printf("Vowels= %d\n", vowels);
+printf("Symbols= %d\n", symbols);
+printf("Numbers= %d\n", numbers);
+shmdt(str);                             	// Detach from shared memory
+shmctl(shmid, IPC_RMID, NULL);            	// Destroy the shared memory segment
+return 0;
+}
