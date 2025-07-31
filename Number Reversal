@@ -1,0 +1,9 @@
+#!/bin/bash
+echo "Enter Number:"
+read n
+for((i=n;i>0;i=i/10))
+do
+dig=$((i%10))
+rev=$((rev*10+dig))
+done
+echo "Result: $rev"
