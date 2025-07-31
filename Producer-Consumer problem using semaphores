@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+typedef struct {
+int value;
+struct process* list;
+}
+semaphore;
+int n,item, flag = 50, q[10], rear = 0, front = 0;
+semaphore semaphore_mutex, semaphore_empty, semaphore_full;
+void wait(semaphore *S) {
+while (S->value <= 0)
+S->value--;
+}
+void signal(semaphore *S) {
+S->value++;
+if (S->value <= 0) {
+}
+}
+void main() {
+printf("Mahima Ann Abraham\nRoll no:63\n");
+semaphore_mutex.value = 1;
+semaphore_empty.value = 10;
+semaphore_full.value = 0;
+printf("Producer-consumer-program.\n");
+while (flag > 0) {
+n = (rand()) % 100 + 1;
+if (n % 2 != 0) {
+printf("\nProducer-running>>>\n");
+wait(&semaphore_empty);
+wait(&semaphore_mutex);
+if ((rear + 1) % 10 == front) {
+printf("\nQueue is full");
+} else {
+q[rear] = n;
+rear = (rear + 1) % 10;
+printf("\nResource locked...");
+printf("\nProduced:%d, resource unlocked...", n);
+}
+signal(&semaphore_mutex);
+signal(&semaphore_full);
+flag--;
+} else {
+printf("\nConsumer running>>>>\n");
+wait(&semaphore_full);
+wait(&semaphore_mutex);
+if (front == rear) {
+printf("\nQueue is empty!\n");
+} else {
+item = q[front];
+front = (front + 1) % 10;
+printf("\nResource locked...");
+printf("\nConsumer consumed: %d, Unlocked....", item);
+}
+signal(&semaphore_mutex);
+signal(&semaphore_empty);
+}
+Flag--;
+}
+}
